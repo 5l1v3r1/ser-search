@@ -9,6 +9,8 @@
 error_reporting(0);
 set_time_limit(0);
 
+if (!extension_loaded('pthreads')) exit ("[-] Pthreads not found, extension needed\n");
+
 function openFile($file) {
 	$fp = fopen($file, 'r');
 	while (!feof($fp)) {
@@ -20,7 +22,7 @@ $opt    = getopt('f:o:t:');
 $output = isset($opt['o']) ?: 'valid-output.txt';
 $pool   = new Pool(isset($opt['t']) ? $opt['t'] : 1);
 
-if (!isset($opt['f'])) exit (sprintf("php %s -f site-list\n", $argv[0]));
+if (!isset($opt['f'])) exit (sprintf("php %s -f site-list -o output -t threads\n", $argv[0]));
 if (!file_exists($opt['f'])) exit (sprintf("[-] File %s not found\n", $opt['f']));
 
 foreach (openFile($opt['f']) as $line) {
